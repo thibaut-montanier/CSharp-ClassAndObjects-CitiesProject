@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace CSharp_ClassAndObjects_CitiesProject.Services {
-    public class CityService {
+    public class CityService : ICityService {
 
         private AskTheUser _AskTheUser;
-        private DepartmentService _DepartmentService;
+        private IDepartmentService _DepartmentService;
         private List<City> _allCities { get; set; } = new List<City>();
 
-        public CityService(AskTheUser askTheUser, DepartmentService departmentService) {
+        public CityService(AskTheUser askTheUser, IDepartmentService departmentService) {
             this._AskTheUser = askTheUser;
             this._DepartmentService = departmentService;
         }

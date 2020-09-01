@@ -13,8 +13,8 @@ namespace CSharp_POO {
         static void Main(string[] args) {
             // services init
             AskTheUser _AskTheUser = new AskTheUser();
-            DepartmentService _DepartmentService = new DepartmentService(_AskTheUser);
-            CityService _CityService = new CityService(_AskTheUser, _DepartmentService);
+            IDepartmentService _DepartmentService = new DepartmentService(_AskTheUser);
+            ICityService _CityService = new CityService(_AskTheUser, _DepartmentService);
             // prog
             bool exit = false;
             List<City> allCities = new List<City>();

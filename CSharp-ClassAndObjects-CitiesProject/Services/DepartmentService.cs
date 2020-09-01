@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 namespace CSharp_ClassAndObjects_CitiesProject.Services {
-    public class DepartmentService {
+    public class DepartmentService : IDepartmentService {
         private AskTheUser _AskTheUser;
         private List<Department> _allDepartments { get; set; } = new List<Department>();
 
