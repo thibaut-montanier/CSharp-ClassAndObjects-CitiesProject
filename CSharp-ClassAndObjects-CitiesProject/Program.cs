@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 
 namespace CSharp_POO {
     public class Program {
-
         private static AskTheUser _AskTheUser = new AskTheUser();
         private static DepartmentService _DepartmentService = new DepartmentService(_AskTheUser);
         static void Main(string[] args) {
