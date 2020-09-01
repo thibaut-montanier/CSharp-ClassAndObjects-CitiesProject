@@ -9,9 +9,13 @@ using System.Runtime.InteropServices;
 
 namespace CSharp_POO {
     public class Program {
-        private static AskTheUser _AskTheUser = new AskTheUser();
-        private static DepartmentService _DepartmentService = new DepartmentService(_AskTheUser);
+
         static void Main(string[] args) {
+            // services init
+            AskTheUser _AskTheUser = new AskTheUser();
+            DepartmentService _DepartmentService = new DepartmentService(_AskTheUser);
+            CityService _CityService = new CityService(_AskTheUser, _DepartmentService);
+            // prog
             bool exit = false;
             List<City> allCities = new List<City>();
             do {
@@ -26,10 +30,10 @@ namespace CSharp_POO {
                 // do actions
                 switch (saisie.ToUpper()) {
                     case "1":
-                        allCities.Add(createCity());
+                        _CityService.createCity();
                         break;
                     case "2":
-                        showCitiesInformation(allCities);
+                        _CityService.showCitiesInformation();
                         break;
                     case "3":
                         _DepartmentService.CreateDepartment();
@@ -50,27 +54,7 @@ namespace CSharp_POO {
             Console.ReadKey();
         }
 
-        private static void showCitiesInformation(List<City> allCities) {
-            foreach (var c in allCities)
-                showCityInformation(c);
-        }
 
-        private static void showCityInformation(City cityToShow) {
-            Console.WriteLine($"City : {cityToShow.Name} " +
-                $"({cityToShow.PostCode} - {cityToShow.Department.Name})");
-            Console.WriteLine($"Cityzen : {cityToShow.NbCitizens}");
-        }
-
-        public static City createCity() {
-            City myCity = new City();
-
-            myCity.Name = _AskTheUser.ForStringValue("City name ?");
-            myCity.NbCitizens = _AskTheUser.ForIntValue("Number of cityzens ?");
-            myCity.PostCode = _AskTheUser.ForStringValue("Postcode ?");
-            myCity.Department = _DepartmentService.AskForDepartment("Department code ?");
-            myCity.Department.Cities.Add(myCity); 
-            return myCity;
-        }
 
 
     }
