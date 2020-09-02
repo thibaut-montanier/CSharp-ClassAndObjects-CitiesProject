@@ -28,6 +28,7 @@ namespace CSharp_POO {
                                 "5. Load many cities\n" +
                                 "6. Reload many cities\n" +
                                 "7. Clear cities\n" +
+                                "8. Save cities to file\n" +
                                 "GC. Garbage collector\n" +
                                 "E. Exit";
                 string saisie = _AskTheUser.ForStringValue(Menu);
@@ -54,6 +55,9 @@ namespace CSharp_POO {
                         break;
                     case "7":
                         _CityService.ClearCities();
+                        break;
+                    case "8":
+                        _CityService.SaveToFile(@"./cities.csv");
                         break;
                     case "GC":
                         GC.Collect();

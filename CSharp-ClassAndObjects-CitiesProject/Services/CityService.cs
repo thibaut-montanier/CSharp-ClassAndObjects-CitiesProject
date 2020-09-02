@@ -49,5 +49,18 @@ namespace CSharp_ClassAndObjects_CitiesProject.Services {
         public void ClearCities() {
             _allCities.Clear();
         }
+
+        public void SaveToFile(string filePath) {
+            StreamWriter sw = new StreamWriter(filePath);
+            try {
+                foreach (City c in _allCities) {
+                    sw.WriteLine($"{c.Name},{c.PostCode},{c.NbCitizens}");
+                }
+            } catch (Exception e) {
+                // do exception management
+            } finally {
+                sw.Dispose();
+            }
+        }
     }
 }
