@@ -5,6 +5,10 @@ using System.Text;
 namespace CSharp_POO.Model {
     public class City {
 
+       ~City() {
+
+        }
+
         /// <summary>
         /// Nom de la commune
         /// </summary>

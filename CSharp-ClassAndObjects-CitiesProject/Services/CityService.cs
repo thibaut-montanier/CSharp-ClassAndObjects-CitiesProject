@@ -1,6 +1,7 @@
 ﻿using CSharp_POO.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace CSharp_ClassAndObjects_CitiesProject.Services {
@@ -14,18 +15,18 @@ namespace CSharp_ClassAndObjects_CitiesProject.Services {
             this._AskTheUser = askTheUser;
             this._DepartmentService = departmentService;
         }
-        public void showCitiesInformation() {
+        public void ShowCitiesInformation() {
             foreach (var c in _allCities)
-                showCityInformation(c);
+                ShowCityInformation(c);
         }
 
-        private void showCityInformation(City cityToShow) {
+        private void ShowCityInformation(City cityToShow) {
             Console.WriteLine($"City : {cityToShow.Name} " +
                 $"({cityToShow.PostCode} - {cityToShow.Department.Name})");
             Console.WriteLine($"Cityzen : {cityToShow.NbCitizens}");
         }
 
-        public void createCity() {
+        public void CreateCity() {
             City myCity = new City();
 
             myCity.Name = _AskTheUser.ForStringValue("City name ?");
@@ -35,7 +36,18 @@ namespace CSharp_ClassAndObjects_CitiesProject.Services {
             myCity.Department.Cities.Add(myCity);
             _allCities.Add(myCity);
         }
+
+        public void AddManyCities(int number) {
+            for (int i = 0; i < number; i++) {
+                _allCities.Add(new City() {
+                    Name = "MyCitiy is a good place to live", NbCitizens = 5000, PostCode = "XXXX",
+                    Department = new Department() { Code = 38, Name = "Here is a good place to live" }
+                });
+            }
+        }
+
+        public void ClearCities() {
+            _allCities.Clear();
+        }
     }
-
-
 }

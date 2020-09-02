@@ -14,7 +14,7 @@ namespace CSharp_POO {
             // services init
             AskTheUser _AskTheUser = new AskTheUser();
             IDepartmentService _DepartmentService = new DepartmentService(_AskTheUser);
-            ICityService _CityService = new CityService(_AskTheUser, _DepartmentService);
+            CityService _CityService = new CityService(_AskTheUser, _DepartmentService);
             // prog
             bool exit = false;
             List<City> allCities = new List<City>();
@@ -25,21 +25,38 @@ namespace CSharp_POO {
                                 "2. Show all cities\n" +
                                 "3. Create a department\n" +
                                 "4. Show all departments\n" +
+                                "5. Load many cities\n" +
+                                "6. Reload many cities\n" +
+                                "7. Clear cities\n" +
+                                "GC. Garbage collector\n" +
                                 "E. Exit";
                 string saisie = _AskTheUser.ForStringValue(Menu);
                 // do actions
                 switch (saisie.ToUpper()) {
                     case "1":
-                        _CityService.createCity();
+                        _CityService.CreateCity();
                         break;
                     case "2":
-                        _CityService.showCitiesInformation();
+                        _CityService.ShowCitiesInformation();
                         break;
                     case "3":
                         _DepartmentService.CreateDepartment();
                         break;
                     case "4":
                         _DepartmentService.ShowDepartmentsInformation();
+                        break;
+                    case "5":
+                        _CityService.AddManyCities(1000000);
+                        break;
+                    case "6":
+                        _CityService.ClearCities();
+                        _CityService.AddManyCities(1000000);
+                        break;
+                    case "7":
+                        _CityService.ClearCities();
+                        break;
+                    case "GC":
+                        GC.Collect();
                         break;
                     case "E":
                         exit = true;

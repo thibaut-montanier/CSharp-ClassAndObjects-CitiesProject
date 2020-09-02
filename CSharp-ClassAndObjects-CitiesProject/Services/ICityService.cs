@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CSharp_ClassAndObjects_CitiesProject.Services {
     public interface ICityService {
-        public void showCitiesInformation();
-        public void createCity();
+        public void ShowCitiesInformation();
+        public void CreateCity();
     }
 }
