@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace CSharp_ClassAndObjects_CitiesProject.Controllers {
-    class GeneralController : IMenuController {
+    public class GeneralController : IMenuController {
 
+
+        public GeneralController() { }
         private bool _exit = false;
         public void DoAction(string saisie) {
             switch (saisie.ToUpper()) {

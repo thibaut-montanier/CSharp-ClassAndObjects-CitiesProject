@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Text;
 
 namespace CSharp_ClassAndObjects_CitiesProject.Controllers {
+    [ClassIgnore("No dept for the moment")]
     class DepartmentController : IMenuController {
 
         private IDepartmentService _DepartmentService;

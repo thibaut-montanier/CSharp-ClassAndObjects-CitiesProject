@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 
@@ -16,12 +17,9 @@ namespace CSharp_POO {
             AskTheUser _AskTheUser = new AskTheUser();
             IDepartmentService _DepartmentService = new DepartmentService(_AskTheUser);
             CityService _CityService = new CityService(_AskTheUser, _DepartmentService);
+
             // controllers init
-            List<IMenuController> ctrls = new List<IMenuController>();
-            ctrls.Add(new CitiesController(_CityService));
-            ctrls.Add(new DepartmentController(_DepartmentService));
-            ctrls.Add(new CitiesAndMemoryController(_CityService));
-            ctrls.Add(new GeneralController());
+            List<IMenuController> ctrls = getControllers(new object[] {_DepartmentService, _CityService});
 
             // generate menu message
             string MenuMessage = "What do you want to do ?\n" +
@@ -48,6 +46,45 @@ namespace CSharp_POO {
 
             Console.WriteLine("Press a key to exit");
             Console.ReadKey();
+        }
+
+
+        /// <summary>
+        /// Another way to initialize controllers
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        private static List<IMenuController> getControllers(object[] parameters) {
+
+            var result = new List<IMenuController>();
+
+            // loading from current assembly
+            Assembly myAssembly = Assembly.GetExecutingAssembly();
+
+            // get all class implementing IMenuController
+            Type typeofIMenuController = typeof(IMenuController); // very slow operation, avoid to do this in loop
+            var allCtrlTypes = myAssembly.GetTypes().Where(t => t.IsClass && typeofIMenuController.IsAssignableFrom(t)
+                                                    && !t.CustomAttributes.Any(att=> att.AttributeType == typeof(ClassIgnoreAttribute)));
+            
+            // now, we create all Controllers
+            foreach(var ctrlType in allCtrlTypes) {
+                // searching for parameters
+                var specificparameters = new List<object>();
+                // we do a sort of Dependency injection, taking a look at constructor parameters
+                foreach (var p in ctrlType.GetConstructors().First().GetParameters()) {
+                    foreach (var inputParams in parameters){
+                        if (p.ParameterType.IsAssignableFrom(inputParams.GetType())) {
+                            specificparameters.Add(inputParams);
+                        }
+                    }
+
+                }
+                // Create the instance with the parameters
+                var newI =  (IMenuController) Activator.CreateInstance(ctrlType, specificparameters.ToArray());
+                result.Add(newI );
+            }
+            // return results sorted by the menu 
+            return result.OrderBy(c => c.showMenu()).ToList();
         }
 
 
