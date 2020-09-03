@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace CSharp_ClassAndObjects_CitiesProject.Controllers {
-    [System.AttributeUsage(System.AttributeTargets.Class |
-                         System.AttributeTargets.Struct)
-  ]
-    public class ClassIgnoreAttribute : System.Attribute {
-        private string _Reason;
-        public double version;
+[System.AttributeUsage(System.AttributeTargets.Class)]
+public class ClassIgnoreAttribute : System.Attribute {
+    public string Reason { get; }
 
-        public ClassIgnoreAttribute(string reason) {
-            this._Reason= reason;
-            version = 1.0;
-        }
+    public ClassIgnoreAttribute(string reason) {
+        this.Reason= reason;
     }
+}
 }

@@ -33,7 +33,7 @@ namespace CSharp_POO {
                 string saisie = _AskTheUser.ForStringValue(MenuMessage);
                 // do actions
                 bool actionDone = false;
-                foreach (var ctrl in ctrls) { 
+                foreach (var ctrl in ctrls) {
                     if (ctrl.isAvailableItem(saisie)) {
                         actionDone = true;
                         ctrl.DoAction(saisie);
@@ -54,38 +54,47 @@ namespace CSharp_POO {
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        private static List<IMenuController> getControllers(object[] parameters) {
+private static List<IMenuController> getControllers(object[] inputServices) {
 
-            var result = new List<IMenuController>();
+    var result = new List<IMenuController>();
 
-            // loading from current assembly
-            Assembly myAssembly = Assembly.GetExecutingAssembly();
+    // loading from current assembly
+    Assembly myAssembly = Assembly.GetExecutingAssembly();
 
-            // get all class implementing IMenuController
-            Type typeofIMenuController = typeof(IMenuController); // very slow operation, avoid to do this in loop
+    // get all class implementing IMenuController
+    Type typeofIMenuController = typeof(IMenuController); // very slow operation, avoid to do this in loop
             var allCtrlTypes = myAssembly.GetTypes().Where(t => t.IsClass && typeofIMenuController.IsAssignableFrom(t)
-                                                    && !t.CustomAttributes.Any(att=> att.AttributeType == typeof(ClassIgnoreAttribute)));
-            
-            // now, we create all Controllers
-            foreach(var ctrlType in allCtrlTypes) {
-                // searching for parameters
-                var specificparameters = new List<object>();
-                // we do a sort of Dependency injection, taking a look at constructor parameters
-                foreach (var p in ctrlType.GetConstructors().First().GetParameters()) {
-                    foreach (var inputParams in parameters){
-                        if (p.ParameterType.IsAssignableFrom(inputParams.GetType())) {
-                            specificparameters.Add(inputParams);
-                        }
-                    }
+                                            && !t.GetCustomAttributes<ClassIgnoreAttribute>().Any());
 
-                }
-                // Create the instance with the parameters
-                var newI =  (IMenuController) Activator.CreateInstance(ctrlType, specificparameters.ToArray());
-                result.Add(newI );
+    // now, we create all Controllers
+    foreach (var ctrlType in allCtrlTypes) {
+        result.Add(createControler(ctrlType, inputServices));
+    }
+    // return results sorted by the menu 
+    return result.OrderBy(c => c.showMenu()).ToList();
+}
+
+
+private static IMenuController createControler(Type CtrlType, object[] inputServices) {
+    // Prepare the list of parameters for the constructor
+    var specificparameters = new List<object>();
+    // we do a sort of Dependency injection, taking a look at constructor parameters
+    // we take the first constructor
+    ConstructorInfo constr = CtrlType.GetConstructors().First();
+    // analyzing constructor parameters
+    foreach (var p in constr.GetParameters()) {
+        // loop on all input services to provide to Controllers
+        foreach (var inputParams in inputServices) {
+            // if the parameter is compatible, we had it to the params
+            if (p.ParameterType.IsAssignableFrom(inputParams.GetType())) {
+                specificparameters.Add(inputParams);
             }
-            // return results sorted by the menu 
-            return result.OrderBy(c => c.showMenu()).ToList();
         }
+
+    }
+    // Create the instance with the parameters
+    return (IMenuController)Activator.CreateInstance(CtrlType, specificparameters.ToArray());
+}
 
 
 

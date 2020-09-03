@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace CSharp_POO.Model {
     public class City {
@@ -21,9 +22,10 @@ namespace CSharp_POO.Model {
         /// Code postal de la commune
         /// </summary>
         public string PostCode { get; set; }
-        /// <summary>
-        /// Departement de la commune
-        /// </summary>
-        public Department Department { get; set; }
+[JsonIgnore()]
+/// <summary>
+/// Departement de la commune
+/// </summary>
+public Department Department { get; set; }
     }
 }
