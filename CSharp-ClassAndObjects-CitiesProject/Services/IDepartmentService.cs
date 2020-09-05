@@ -8,5 +8,7 @@ public interface IDepartmentService {
     void ShowDepartmentsInformation();
     Department AskForDepartment(string msg);
     void CreateDepartment();
-}
+        Department TryGetDepartment(int code);
+        void AddDepartment(Department d);
+    }
 }

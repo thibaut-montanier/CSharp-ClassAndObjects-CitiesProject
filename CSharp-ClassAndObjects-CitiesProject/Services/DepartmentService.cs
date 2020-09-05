@@ -46,9 +46,16 @@ namespace CSharp_ClassAndObjects_CitiesProject.Services {
             Department dpt = new Department();
             dpt.Name = _AskTheUser.ForStringValue("Department name ?");
             dpt.Code = _AskTheUser.ForIntValue("Department code ?");
-            _allDepartments.Add(dpt);
+            AddDepartment(dpt);
         }
 
+        public Department TryGetDepartment(int code) {
+            return _allDepartments.FirstOrDefault(d => d.Code == code);
+        }
+
+        public void AddDepartment(Department d) {
+            _allDepartments.Add(d);
+        }
     }
 
 }

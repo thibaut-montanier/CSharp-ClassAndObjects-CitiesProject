@@ -13,24 +13,28 @@ namespace CSharp_ClassAndObjects_CitiesProject.Controllers {
             this._CityService = cityService;
         }
         public string showMenu() {
-            return "1. Create a city\n" +
-                    "2. Show all cities";
+            return "11 Create a city\n" +
+                    "12 Show all cities\n" + 
+                    "13 Load csv";
                    
         }
 
         public void DoAction(string saisie) {
             switch (saisie.ToUpper()) {
-                case "1":
+                case "11":
                     _CityService.CreateCity();
                     break;
-                case "2":
+                case "12":
                     _CityService.ShowCitiesInformation();
+                    break;
+                case "13":
+                    _CityService.LoadFromCsv(@"./Resources/FrenchCities.csv");
                     break;
             }
         }
 
         public bool isAvailableItem(string saisie) {
-            return saisie == "1" || saisie == "2" ;
+            return saisie == "11" || saisie == "12" || saisie == "13";
         }
 
         public bool exit() {

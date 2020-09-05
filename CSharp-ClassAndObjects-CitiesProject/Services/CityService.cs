@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace CSharp_ClassAndObjects_CitiesProject.Services {
@@ -24,6 +25,55 @@ namespace CSharp_ClassAndObjects_CitiesProject.Services {
             Console.WriteLine($"City : {cityToShow.Name} " +
                 $"({cityToShow.PostCode} - {cityToShow.Department.Name})");
             Console.WriteLine($"Cityzen : {cityToShow.NbCitizens}");
+        }
+
+        public void LoadFromCsv(string filePath) {
+            try { 
+            _allCities.AddRange(ReadFromCsv(filePath));
+            }catch(Exception e) {
+                Console.WriteLine("Error during operation...");
+            }
+        }
+
+        private IEnumerable<City> ReadFromCsv(string pathFile) {
+
+            // open the stream reader
+            using (var sr = new StreamReader(pathFile)) {
+                var firstLine = sr.ReadLine(); // headers
+                string currentLine = sr.ReadLine();// read nextLine
+                while (!sr.EndOfStream) {
+                    // get line content
+                    List<string> lineContent = currentLine.Split(';')
+                                                            .ToList();
+                    // read datas and create city
+                    City city = new City() {
+                        Name= lineContent[2],
+                        PostCode = lineContent[3],
+                        NbCitizens = int.Parse(lineContent[4])
+                    };
+                    // department management
+                    int departmentCode;
+                    if (!int.TryParse(lineContent[1], out departmentCode))
+                        throw new Exception("Department error in the file");
+                    var d = _DepartmentService.TryGetDepartment(departmentCode);
+                    if (d == null) {
+                        d = new Department() {
+                            Name = lineContent[5],
+                            Code = departmentCode
+                        };
+                        _DepartmentService.AddDepartment(d);
+                    }
+
+                    city.Department = d;
+                    d.Cities.Add(city);
+                    // city is now ready
+                    yield return city;
+
+                    // go to next line
+                    currentLine = sr.ReadLine();
+                }
+            }// close and release resources
+
         }
 
         public void CreateCity() {
