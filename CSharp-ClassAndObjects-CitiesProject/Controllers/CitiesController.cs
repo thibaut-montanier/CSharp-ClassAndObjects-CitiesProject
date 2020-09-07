@@ -14,8 +14,9 @@ namespace CSharp_ClassAndObjects_CitiesProject.Controllers {
         }
         public string showMenu() {
             return "11 Create a city\n" +
-                    "12 Show all cities\n" + 
-                    "13 Load csv";
+                    "12 Show all cities\n" +
+                    "13 Load csv\n" + 
+                    "14 Write csv";
                    
         }
 
@@ -30,11 +31,14 @@ namespace CSharp_ClassAndObjects_CitiesProject.Controllers {
                 case "13":
                     _CityService.LoadFromCsv(@"./Resources/FrenchCities.csv");
                     break;
+                case "14":
+                    _CityService.WriteToCsc(@"d:\tmp\FrenchCities.csv");
+                    break;
             }
         }
 
         public bool isAvailableItem(string saisie) {
-            return saisie == "11" || saisie == "12" || saisie == "13";
+            return saisie == "11" || saisie == "12" || saisie == "13" || saisie=="14";
         }
 
         public bool exit() {

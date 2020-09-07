@@ -76,6 +76,23 @@ namespace CSharp_ClassAndObjects_CitiesProject.Services {
 
         }
 
+        public void WriteToCsc( string csvFilePath) {
+            try {
+                using (var sw = new StreamWriter(csvFilePath)) {
+                    //if you want to write first line
+                    sw.WriteLine("ID;DepartmentCode;City;PostCode;Citizens;DepartmentName");
+                    // write a line for each person
+                    foreach (City c in _allCities) {
+                        string lineContent = $";{c.Department.Code.ToString("00")};{c.Name};{c.PostCode};{c.NbCitizens};{c.Department.Name}";
+                        sw.WriteLine(lineContent);
+                    }
+                }
+            } catch (Exception e) {
+                //do some exception management
+                throw;
+            }
+        }
+
         public void CreateCity() {
             City myCity = new City();
 
